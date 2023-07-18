@@ -36,12 +36,6 @@ namespace ErrorSample.Controllers
             // Configure the SQL data source
             ds.ConnectionName = "NWindConnectionString";
 
-            //// Add the custom queries
-            //ds.Queries.Add(new CustomSqlQuery("BranchesParameterQuery", "SELECT \"BranchId\", \"Name\" FROM \"dbo\".\"Branch\""));
-            ////ds.Queries.Add(new CustomSqlQuery("ClosingsParameterQuery", "SELECT \"PointOfSaleId\", \"BranchId\", \"ClosingId\", \"ClosingNumber\", \"EndDate\", \"PointOfSaleNumber\", \"Name\" FROM \"dbo\".\"Closing\" INNER JOIN \"dbo\".\"PointOfSale\" ON \"PointOfSale\".\"BranchId\" = \"Closing\".\"BranchId\" AND \"PointOfSale\".\"PointOfSaleId\" = \"Closing\".\"PointOfSaleId\" WHERE (NOT ((\"EndDate\") IS NULL OR LEN(\"EndDate\") = 0)) AND ((@PeriodStartQueryParameter <= \"EndDate\") AND (\"EndDate\" <= @PeriodEndQueryParameter)) ORDER BY \"EndDate\" DESC"));
-            //ds.Queries.Add(new CustomSqlQuery("PointOfSalesParameterQuery", "SELECT \"BranchId\", \"PointOfSaleId\", \"Name\" FROM \"dbo\".\"PointOfSale\""));
-            //ds.Queries.Add(new CustomSqlQuery("ProductCategoriesQuery", "SELECT \"ProductCategoryId\", \"Name\" FROM \"dbo\".\"ProductCategory\""));
-
             ds.Fill();
 
             dataSources.Add("sqlDataSource1", ds);
