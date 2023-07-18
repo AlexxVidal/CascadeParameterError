@@ -1,0 +1,6 @@
+<dx-report-viewer [reportUrl]="reportUrl" height="800px">
+  <dxrv-request-options [invokeAction]="invokeAction" [host]="hostUrl"></dxrv-request-options>
+  <dxrv-callbacks (ParametersSubmitted)="parametersSubmitted($event)"
+                  (ParametersInitialized)="parametersInitialized($event)"></dxrv-callbacks>
+    <dxrv-export-settings [useSameTab]="true" [useAsynchronousExport]="true"></dxrv-export-settings>
+</dx-report-viewer>

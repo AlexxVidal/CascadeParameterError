@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="23.1.3.0" Ref="1" ControlType="ErrorSample.PredefinedReports.ReportReport, ErrorSample, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Name="XtraReport" SnapGridSize="31.75" ReportUnit="TenthsOfAMillimeter" PageWidth="2100" PageHeight="2970" Version="23.1" DataMember="BranchesParameterQuery" DataSource="#Ref-0" TextAlignment="TopRight" Dpi="254">
+  <Parameters>
+    <Item1 Ref="4" ValueSourceSettings="#Ref-2" MultiValue="true" SelectAllValues="true" Name="BranchesParameter" Type="#Ref-3" />
+    <Item2 Ref="6" ValueSourceSettings="#Ref-5" MultiValue="true" SelectAllValues="true" Name="PointOfSalesParameter" Type="#Ref-3" />
+    <Item3 Ref="9" ValueSourceSettings="#Ref-7" Name="PeriodParameter" Type="#Ref-8" />
+    <Item4 Ref="11" ValueSourceSettings="#Ref-10" MultiValue="true" SelectAllValues="true" Name="ClosingsParameter" Type="#Ref-3">
+      <ExpressionBindings>
+        <Item1 Ref="12" PropertyName="Visible" Expression="?ClosingOnlyParameter == true" />
+      </ExpressionBindings>
+    </Item4>
+    <Item5 Ref="14" ValueInfo="false" Name="ClosingOnlyParameter" Type="#Ref-13" />
+    <Item6 Ref="16" ValueSourceSettings="#Ref-15" MultiValue="true" SelectAllValues="true" Name="ProductCategoriesParameter" Type="#Ref-3" />
+    <Item7 Ref="19" ValueSourceSettings="#Ref-17" ValueInfo="Day" Name="ProductsSalesGroupByParameter" />
+    <Item8 Ref="20" ValueInfo="true" Name="ShowDetails" Type="#Ref-13" />
+  </Parameters>
+  <CalculatedFields>
+    <Item1 Ref="21" Name="PostalCodeCity" FieldType="String" Expression=" Concat([PostalCode], ' ',  [City]) " DataMember="OrganizationDataQuery" />
+    <Item2 Ref="22" Name="GroupBy" FieldType="String" Expression="Iif( ?ProductsSalesGroupByParameter = 'POS', [pos.PointOfSale_Name] , [pos.Branch_Name]  ) " DataMember="PaymentsByPaymentMethodGroupByQuery" />
+    <Item3 Ref="23" Name="ClosingFriendlyName" FieldType="String" Expression="FormatString( '{0:000}', [ClosingNumber])" DataMember="ProductsSalesQuery" />
+    <Item4 Ref="24" Name="ReceiptFriendlyName" Expression="FormatString( '{0:000}', [OrderNumber] )" DataMember="ProductsSalesQuery" />
+    <Item5 Ref="25" Name="GroupByField" Expression="Iif( ?ProductsSalesGroupByParameter = 'POS', [PointOfSaleId], Iif( ?ProductsSalesGroupByParameter = 'Branch', [BranchId], Iif(?ProductsSalesGroupByParameter = 'ProductCategory', [pos.ProductCategory_Name]   , Iif(?ProductsSalesGroupByParameter = 'Closing', [ClosingIdentifier]   , FormatString('{0:0000}', DateDiffDay(GetDate(ToStr( [LocalCompletionDate]  )), Today())) ) )) )" DataMember="ProductsSalesQuery" />
+    <Item6 Ref="26" Name="FriendlyName" Expression="Concat('#',FormatString( '{0:00}',[PointOfSaleNumber]),'.', FormatString( '{0:000}', [ClosingNumber])) " DataMember="ClosingsParameterQuery" />
+    <Item7 Ref="27" Name="DayOfWeek" Expression="GetDay( [CompletionDate] ) " DataMember="ProductsSalesQuery" />
+    <Item8 Ref="28" Name="ChartGroupByField" Expression="Iif( ?ProductsSalesGroupByParameter = 'POS', [pos.PointOfSale_Name] , Iif( ?ProductsSalesGroupByParameter = 'Branch', [pos.Branch_Name] , Iif(?ProductsSalesGroupByParameter = 'ProductCategory', [pos.ProductCategory_Name]   , FormatString( '{0:dd.MM.yyyy}',[CompletionDate]) ) )) " DataMember="ProductsSalesQuery" />
+    <Item9 Ref="29" Name="ComputedQuantity" Expression="Iif( [Unit] = 'Piece', [Quantity]  , 1  ) " DataMember="ProductsSalesQuery" />
+    <Item10 Ref="30" Name="DisplayName" Expression="[Name] + ' - #' + [ClosingNumber]" DataMember="ClosingsParameterQuery" />
+    <Item11 Ref="31" Name="LocalCompletionDate" FieldType="DateTime" Expression="ToLocalDate([CompletionDate])" DataMember="ProductsSalesQuery" />
+    <Item12 Ref="32" Name="ClosingIdentifier" Expression="Concat( FormatString('{0:0000}', DateDiffDay(GetDate(ToStr( [EndDate] )), Today())), [ClosingId]  )" DataMember="ProductsSalesQuery" />
+    <Item13 Ref="33" Name="ClosingCompleteName" Expression="Concat( [pos.PointOfSale_Name] , ' - #', FormatString( '{0:000}', [ClosingNumber]) )" DataMember="ProductsSalesQuery" />
+    <Item14 Ref="34" Name="ProductNameWithCode" Expression="Iif(IsNull([Code]),[ProductName],Concat([ProductName],' (',[Code],')'))" DataMember="ProductsSalesQuery" />
+  </CalculatedFields>
+  <Bands>
+    <Item1 Ref="35" ControlType="TopMarginBand" Name="TopMargin1" Dpi="254" />
+    <Item2 Ref="36" ControlType="DetailBand" Name="Detail1" Dpi="254" EvenStyleName="TableEvenStyle" OddStyleName="TableOddStyle">
+      <ExpressionBindings>
+        <Item1 Ref="37" EventName="BeforePrint" PropertyName="Visible" Expression="[DataSource.RowCount] &gt; 0" />
+      </ExpressionBindings>
+    </Item2>
+    <Item3 Ref="38" ControlType="DetailReportBand" Name="DetailReport1" Level="0" DataMember="ProductsSalesQuery" Dpi="254">
+      <Bands>
+        <Item1 Ref="39" ControlType="DetailBand" Name="Detail2" Dpi="254" />
+      </Bands>
+      <ReportPrintOptions Ref="40" PrintOnEmptyDataSource="false" />
+    </Item3>
+    <Item4 Ref="41" ControlType="DetailReportBand" Name="DetailReport2" Level="1" DataMember="ProductsSalesQuery" Dpi="254">
+      <Bands>
+        <Item1 Ref="42" ControlType="GroupHeaderBand" Name="GroupHeader2" RepeatEveryPage="true" KeepTogether="true" Dpi="254">
+          <GroupFields>
+            <Item1 Ref="43" FieldName="GroupByField" />
+          </GroupFields>
+        </Item1>
+        <Item2 Ref="44" ControlType="DetailBand" Name="Detail3" Dpi="254">
+          <SortFields>
+            <Item1 Ref="45" FieldName="CompletionDate" SortOrder="Descending" />
+          </SortFields>
+        </Item2>
+      </Bands>
+      <ReportPrintOptions Ref="46" PrintOnEmptyDataSource="false" />
+      <ExpressionBindings>
+        <Item1 Ref="47" EventName="BeforePrint" PropertyName="Visible" Expression="?ShowDetails == true" />
+      </ExpressionBindings>
+    </Item4>
+    <Item5 Ref="48" ControlType="ReportFooterBand" Name="ReportFooter1" Dpi="254">
+      <ExpressionBindings>
+        <Item1 Ref="49" EventName="BeforePrint" PropertyName="Visible" Expression="[ReportItems.DetailReport2.RowCount] == 0" />
+      </ExpressionBindings>
+    </Item5>
+    <Item6 Ref="50" ControlType="PageFooterBand" Name="PageFooter1" Dpi="254" />
+    <Item7 Ref="51" ControlType="BottomMarginBand" Name="BottomMargin1" Dpi="254" />
+  </Bands>
+  <StyleSheet>
+    <Item1 Ref="52" Name="TableHeaderStyle" BorderStyle="Inset" Padding="10,10,5,5,100" Font="Arial, 9.5pt, style=Bold" ForeColor="White" BackColor="255,110,116,128" BorderColor="255,141,147,157" BorderDashStyle="Solid" Sides="None" StringFormat="Near;Center;0;None;Character;GenericDefault" TextAlignment="MiddleLeft" BorderWidthSerializable="1" />
+    <Item2 Ref="53" Name="TableEvenStyle" BorderStyle="Inset" Padding="10,10,5,5,100" BackColor="255,247,248,250" StringFormat="Near;Near;0;None;Character;GenericDefault" />
+    <Item3 Ref="54" Name="TableOddStyle" BorderStyle="Inset" Padding="10,10,5,5,100" StringFormat="Near;Near;0;None;Character;GenericDefault" />
+    <Item4 Ref="55" Name="ParameterLabelStyle" BorderStyle="Inset" Padding="5,5,5,5,100" Font="Arial, 8pt, style=Bold" ForeColor="255,110,116,128" StringFormat="Near;Center;0;None;Character;GenericDefault" TextAlignment="MiddleLeft" />
+    <Item5 Ref="56" Name="ParameterValueStyle" BorderStyle="Inset" Padding="5,5,5,5,100" Font="Arial, 8pt" ForeColor="255,110,116,128" StringFormat="Near;Center;0;None;Character;GenericDefault" TextAlignment="MiddleLeft" />
+  </StyleSheet>
+  <LocalizationItems>
+    <Item1 Ref="57" Component="#Ref-4" Culture="Default" Path="Description" Data="Branches" />
+    <Item2 Ref="58" Component="#Ref-36" Culture="Default" Path="HeightF" Data="2.054" />
+    <Item3 Ref="59" Component="#Ref-39" Culture="Default" Path="HeightF" Data="1.712" />
+    <Item4 Ref="60" Component="#Ref-44" Culture="Default" Path="HeightF" Data="63.604" />
+    <Item5 Ref="61" Component="#Ref-42" Culture="Default" Path="HeightF" Data="63.531" />
+    <Item6 Ref="62" Component="#Ref-9" Culture="Default" Path="Description" Data="Period" />
+    <Item7 Ref="63" Component="#Ref-6" Culture="Default" Path="Description" Data="Point of sales" />
+    <Item8 Ref="64" Component="#Ref-35" Culture="Default" Path="HeightF" Data="120" />
+    <Item9 Ref="65" Component="#Ref-1" Culture="Default" Path="Font" Data="Arial, 9pt" />
+    <Item10 Ref="66" Component="#Ref-1" Culture="Default" Path="Margins" Data="120, 120, 120, 100" />
+    <Item11 Ref="67" Component="#Ref-1" Culture="Default" Path="PaperKind" Data="A4" />
+    <Item12 Ref="68" Component="#Ref-38" Culture="Default" Path="HeightF" Data="1.712" />
+    <Item13 Ref="69" Component="#Ref-41" Culture="Default" Path="HeightF" Data="127.13499999999999" />
+    <Item14 Ref="70" Component="#Ref-48" Culture="Default" Path="HeightF" Data="109.749" />
+    <Item15 Ref="71" Component="#Ref-19" Culture="Default" Path="Description" Data="Group by" />
+    <Item16 Ref="72" Component="#Ref-1" Culture="Default" Path="Bookmark" Data="" />
+    <Item17 Ref="73" Component="#Ref-14" Culture="Default" Path="Description" Data="Select closings" />
+    <Item18 Ref="74" Component="#Ref-11" Culture="Default" Path="Description" Data="Closings" />
+    <Item19 Ref="75" Component="#Ref-1" Culture="Default" Path="DisplayName" Data="Products sales journal" />
+    <Item20 Ref="76" Component="#Ref-50" Culture="Default" Path="HeightF" Data="70.556" />
+    <Item21 Ref="77" Component="#Ref-16" Culture="Default" Path="Description" Data="Product categories" />
+    <Item22 Ref="78" Component="#Ref-20" Culture="Default" Path="Description" Data="Show details" />
+    <Item23 Ref="79" Component="#Ref-6" Culture="fr-CH" Path="Description" Data="Points de vente" />
+    <Item24 Ref="80" Component="#Ref-9" Culture="fr-CH" Path="Description" Data="Période" />
+    <Item25 Ref="81" Component="#Ref-19" Culture="fr-CH" Path="Description" Data="Grouper par" />
+    <Item26 Ref="82" Component="#Ref-14" Culture="fr-CH" Path="Description" Data="Sélect. les clôtures" />
+    <Item27 Ref="83" Component="#Ref-11" Culture="fr-CH" Path="Description" Data="Clôtures" />
+    <Item28 Ref="84" Component="#Ref-16" Culture="fr-CH" Path="Description" Data="Catégories de produits" />
+    <Item29 Ref="85" Component="#Ref-1" Culture="fr-CH" Path="DisplayName" Data="Journal des ventes de produits" />
+    <Item30 Ref="86" Component="#Ref-4" Culture="fr-CH" Path="Description" Data="Succursales" />
+    <Item31 Ref="87" Component="#Ref-4" Culture="de-CH" Path="Description" Data="Filialen" />
+    <Item32 Ref="88" Component="#Ref-6" Culture="de-CH" Path="Description" Data="Kassen" />
+    <Item33 Ref="89" Component="#Ref-9" Culture="de-CH" Path="Description" Data="Zeitraum" />
+    <Item34 Ref="90" Component="#Ref-19" Culture="de-CH" Path="Description" Data="Gruppieren nach" />
+    <Item35 Ref="91" Component="#Ref-14" Culture="de-CH" Path="Description" Data="Abschlüsse auswählen" />
+    <Item36 Ref="92" Component="#Ref-11" Culture="de-CH" Path="Description" Data="Abschlüsse" />
+    <Item37 Ref="93" Component="#Ref-16" Culture="de-CH" Path="Description" Data="Produktkategorien" />
+    <Item38 Ref="94" Component="#Ref-1" Culture="es-ES" Path="DisplayName" Data="Diario de ventas de productos" />
+    <Item39 Ref="95" Component="#Ref-4" Culture="es-ES" Path="Description" Data="Sucursales" />
+    <Item40 Ref="96" Component="#Ref-6" Culture="es-ES" Path="Description" Data="Punto de venta" />
+    <Item41 Ref="97" Component="#Ref-9" Culture="es-ES" Path="Description" Data="Periodo" />
+    <Item42 Ref="98" Component="#Ref-19" Culture="es-ES" Path="Description" Data="Grupo por" />
+    <Item43 Ref="99" Component="#Ref-14" Culture="es-ES" Path="Description" Data="Cierres selectos" />
+    <Item44 Ref="100" Component="#Ref-11" Culture="es-ES" Path="Description" Data="Cierres" />
+    <Item45 Ref="101" Component="#Ref-16" Culture="es-ES" Path="Description" Data="Categorías de productos" />
+  </LocalizationItems>
+  <ParameterPanelLayoutItems>
+    <Item1 Ref="102" LayoutItemType="Group" Title="Dates" ShowExpandButton="true">
+      <Items>
+        <Item1 Ref="103" LayoutItemType="Parameter" Parameter="#Ref-9" />
+      </Items>
+    </Item1>
+    <Item2 Ref="104" LayoutItemType="Group" Title="Filters" ShowExpandButton="true">
+      <Items>
+        <Item1 Ref="105" LayoutItemType="Parameter" Parameter="#Ref-4" />
+        <Item2 Ref="106" LayoutItemType="Parameter" Parameter="#Ref-6" />
+        <Item3 Ref="107" LayoutItemType="Parameter" Parameter="#Ref-16" />
+      </Items>
+    </Item2>
+    <Item3 Ref="108" LayoutItemType="Group" Title="Closings" ShowExpandButton="true">
+      <Items>
+        <Item1 Ref="109" LayoutItemType="Parameter" Parameter="#Ref-14" />
+        <Item2 Ref="110" LayoutItemType="Parameter" Parameter="#Ref-11" />
+      </Items>
+    </Item3>
+    <Item4 Ref="111" LayoutItemType="Group" Title="Options" ShowExpandButton="true">
+      <Items>
+        <Item1 Ref="112" LayoutItemType="Parameter" Parameter="#Ref-19" />
+        <Item2 Ref="113" LayoutItemType="Parameter" Parameter="#Ref-20" />
+      </Items>
+    </Item4>
+  </ParameterPanelLayoutItems>
+  <ComponentStorage>
+    <Item1 Ref="0" ObjectType="DevExpress.DataAccess.Sql.SqlDataSource,DevExpress.DataAccess.v23.1" Name="sqlDataSource11" Base64="PFNxbERhdGFTb3VyY2UgTmFtZT0ic3FsRGF0YVNvdXJjZTExIj48Q29ubmVjdGlvbiBOYW1lPSJOV2luZENvbm5lY3Rpb25TdHJpbmciIEZyb21BcHBDb25maWc9InRydWUiIC8+PFF1ZXJ5IFR5cGU9IlNlbGVjdFF1ZXJ5IiBOYW1lPSJCcmFuY2hlc1BhcmFtZXRlclF1ZXJ5Ij48VGFibGVzPjxUYWJsZSBOYW1lPSJCcmFuY2giIC8+PC9UYWJsZXM+PENvbHVtbnM+PENvbHVtbiBUYWJsZT0iQnJhbmNoIiBOYW1lPSJOYW1lIiAvPjxDb2x1bW4gVGFibGU9IkJyYW5jaCIgTmFtZT0iQnJhbmNoSWQiIC8+PC9Db2x1bW5zPjwvUXVlcnk+PFF1ZXJ5IFR5cGU9IlNlbGVjdFF1ZXJ5IiBOYW1lPSJDbG9zaW5nc1BhcmFtZXRlclF1ZXJ5Ij48UGFyYW1ldGVyIE5hbWU9IlBlcmlvZFN0YXJ0UXVlcnlQYXJhbWV0ZXIiIFR5cGU9IkRldkV4cHJlc3MuRGF0YUFjY2Vzcy5FeHByZXNzaW9uIj4oU3lzdGVtLkRhdGVUaW1lKShUb1V0Y0RhdGUoR2V0RGF0ZShUb1N0cig/UGVyaW9kUGFyYW1ldGVyX1N0YXJ0KSkpKTwvUGFyYW1ldGVyPjxQYXJhbWV0ZXIgTmFtZT0iUGVyaW9kRW5kUXVlcnlQYXJhbWV0ZXIiIFR5cGU9IkRldkV4cHJlc3MuRGF0YUFjY2Vzcy5FeHByZXNzaW9uIj4oU3lzdGVtLkRhdGVUaW1lKShUb1V0Y0RhdGUoQWRkRGF5cyhHZXREYXRlKFRvU3RyKD9QZXJpb2RQYXJhbWV0ZXJfRW5kKSksIDEgKSkpPC9QYXJhbWV0ZXI+PFRhYmxlcz48VGFibGUgTmFtZT0iQ2xvc2luZyIgLz48VGFibGUgTmFtZT0iUG9pbnRPZlNhbGUiIC8+PFJlbGF0aW9uIFR5cGU9IklubmVyIiBQYXJlbnQ9IkNsb3NpbmciIE5lc3RlZD0iUG9pbnRPZlNhbGUiPjxLZXlDb2x1bW4gUGFyZW50PSJCcmFuY2hJZCIgTmVzdGVkPSJCcmFuY2hJZCIgLz48S2V5Q29sdW1uIFBhcmVudD0iUG9pbnRPZlNhbGVJZCIgTmVzdGVkPSJQb2ludE9mU2FsZUlkIiAvPjwvUmVsYXRpb24+PC9UYWJsZXM+PENvbHVtbnM+PENvbHVtbiBUYWJsZT0iQ2xvc2luZyIgTmFtZT0iUG9pbnRPZlNhbGVJZCIgLz48Q29sdW1uIFRhYmxlPSJDbG9zaW5nIiBOYW1lPSJCcmFuY2hJZCIgLz48Q29sdW1uIFRhYmxlPSJDbG9zaW5nIiBOYW1lPSJDbG9zaW5nSWQiIC8+PENvbHVtbiBUYWJsZT0iQ2xvc2luZyIgTmFtZT0iRW5kRGF0ZSIgLz48Q29sdW1uIFRhYmxlPSJDbG9zaW5nIiBOYW1lPSJDbG9zaW5nTnVtYmVyIiAvPjxDb2x1bW4gVGFibGU9IlBvaW50T2ZTYWxlIiBOYW1lPSJQb2ludE9mU2FsZU51bWJlciIgLz48Q29sdW1uIFRhYmxlPSJQb2ludE9mU2FsZSIgTmFtZT0iTmFtZSIgLz48L0NvbHVtbnM+PFNvcnRpbmc+PENvbHVtbiBUYWJsZT0iQ2xvc2luZyIgTmFtZT0iRW5kRGF0ZSIgRGVzY2VuZGluZz0idHJ1ZSIgLz48L1NvcnRpbmc+PC9RdWVyeT48UXVlcnkgVHlwZT0iU2VsZWN0UXVlcnkiIE5hbWU9IlBvaW50T2ZTYWxlc1BhcmFtZXRlclF1ZXJ5Ij48UGFyYW1ldGVyIE5hbWU9IkJyYW5jaGVzIiBUeXBlPSJEZXZFeHByZXNzLkRhdGFBY2Nlc3MuRXhwcmVzc2lvbiI+KFN5c3RlbS5HdWlkKSg/QnJhbmNoZXNQYXJhbWV0ZXIpPC9QYXJhbWV0ZXI+PFRhYmxlcz48VGFibGUgTmFtZT0iUG9pbnRPZlNhbGUiIC8+PC9UYWJsZXM+PENvbHVtbnM+PENvbHVtbiBUYWJsZT0iUG9pbnRPZlNhbGUiIE5hbWU9IkJyYW5jaElkIiAvPjxDb2x1bW4gVGFibGU9IlBvaW50T2ZTYWxlIiBOYW1lPSJQb2ludE9mU2FsZUlkIiAvPjxDb2x1bW4gVGFibGU9IlBvaW50T2ZTYWxlIiBOYW1lPSJOYW1lIiAvPjwvQ29sdW1ucz48L1F1ZXJ5PjxRdWVyeSBUeXBlPSJTZWxlY3RRdWVyeSIgTmFtZT0iUHJvZHVjdENhdGVnb3JpZXNRdWVyeSI+PFRhYmxlcz48VGFibGUgTmFtZT0iUHJvZHVjdENhdGVnb3J5IiAvPjwvVGFibGVzPjxDb2x1bW5zPjxDb2x1bW4gVGFibGU9IlByb2R1Y3RDYXRlZ29yeSIgTmFtZT0iUHJvZHVjdENhdGVnb3J5SWQiIC8+PENvbHVtbiBUYWJsZT0iUHJvZHVjdENhdGVnb3J5IiBOYW1lPSJOYW1lIiAvPjwvQ29sdW1ucz48L1F1ZXJ5PjxSZXN1bHRTY2hlbWE+PERhdGFTZXQgTmFtZT0ic3FsRGF0YVNvdXJjZTExIj48VmlldyBOYW1lPSJQcm9kdWN0Q2F0ZWdvcmllc1F1ZXJ5Ij48RmllbGQgTmFtZT0iUHJvZHVjdENhdGVnb3J5SWQiIFR5cGU9Ikd1aWQiIC8+PEZpZWxkIE5hbWU9Ik5hbWUiIFR5cGU9IlN0cmluZyIgLz48L1ZpZXc+PFZpZXcgTmFtZT0iUG9pbnRPZlNhbGVzUGFyYW1ldGVyUXVlcnkiPjxGaWVsZCBOYW1lPSJCcmFuY2hJZCIgVHlwZT0iR3VpZCIgLz48RmllbGQgTmFtZT0iUG9pbnRPZlNhbGVJZCIgVHlwZT0iR3VpZCIgLz48RmllbGQgTmFtZT0iTmFtZSIgVHlwZT0iU3RyaW5nIiAvPjwvVmlldz48VmlldyBOYW1lPSJDbG9zaW5nc1BhcmFtZXRlclF1ZXJ5Ij48RmllbGQgTmFtZT0iUG9pbnRPZlNhbGVJZCIgVHlwZT0iR3VpZCIgLz48RmllbGQgTmFtZT0iQnJhbmNoSWQiIFR5cGU9Ikd1aWQiIC8+PEZpZWxkIE5hbWU9IkNsb3NpbmdJZCIgVHlwZT0iR3VpZCIgLz48RmllbGQgTmFtZT0iRW5kRGF0ZSIgVHlwZT0iVW5rbm93biIgLz48RmllbGQgTmFtZT0iQ2xvc2luZ051bWJlciIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IlBvaW50T2ZTYWxlTnVtYmVyIiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0iTmFtZSIgVHlwZT0iU3RyaW5nIiAvPjwvVmlldz48VmlldyBOYW1lPSJCcmFuY2hlc1BhcmFtZXRlclF1ZXJ5Ij48RmllbGQgTmFtZT0iTmFtZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJCcmFuY2hJZCIgVHlwZT0iR3VpZCIgLz48L1ZpZXc+PC9EYXRhU2V0PjwvUmVzdWx0U2NoZW1hPjxDb25uZWN0aW9uT3B0aW9ucyBDbG9zZUNvbm5lY3Rpb249InRydWUiIC8+PC9TcWxEYXRhU291cmNlPg==" />
+  </ComponentStorage>
+  <ObjectStorage>
+    <Item1 Ref="2" ObjectType="DevExpress.XtraReports.Parameters.DynamicListLookUpSettings, DevExpress.Printing.v23.1.Core" DataSource="#Ref-0" DataMember="BranchesParameterQuery" ValueMember="BranchId" DisplayMember="Name" SortMember="Name" SortOrder="Ascending" />
+    <Item2 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v23.1" Ref="3" Content="System.Guid" Type="System.Type" />
+    <Item3 Ref="5" ObjectType="DevExpress.XtraReports.Parameters.DynamicListLookUpSettings, DevExpress.Printing.v23.1.Core" DataSource="#Ref-0" DataMember="PointOfSalesParameterQuery" ValueMember="PointOfSaleId" DisplayMember="Name" SortMember="Name" SortOrder="Ascending" FilterString="[BranchId] = ?BranchesParameter" />
+    <Item4 Ref="7" ObjectType="DevExpress.XtraReports.Parameters.RangeParametersSettings, DevExpress.Printing.v23.1.Core" StartParameter="#Ref-114" EndParameter="#Ref-115" />
+    <Item5 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v23.1" Ref="8" Content="System.DateTime" Type="System.Type" />
+    <Item6 Ref="10" ObjectType="DevExpress.XtraReports.Parameters.DynamicListLookUpSettings, DevExpress.Printing.v23.1.Core" DataSource="#Ref-0" DataMember="ClosingsParameterQuery" ValueMember="ClosingId" DisplayMember="DisplayName" FilterString="[PointOfSaleId] = ?PointOfSalesParameter And [EndDate] Between(ToUtcDate(?PeriodParameter_Start), ToUtcDate(AddDays(?PeriodParameter_End, 1)))" />
+    <Item7 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v23.1" Ref="13" Content="System.Boolean" Type="System.Type" />
+    <Item8 Ref="15" ObjectType="DevExpress.XtraReports.Parameters.DynamicListLookUpSettings, DevExpress.Printing.v23.1.Core" DataSource="#Ref-0" DataMember="ProductCategoriesQuery" ValueMember="ProductCategoryId" DisplayMember="Name" SortMember="Name" SortOrder="Ascending" />
+    <Item9 Ref="17" ObjectType="DevExpress.XtraReports.Parameters.StaticListLookUpSettings, DevExpress.Printing.v23.1.Core">
+      <LookUpValues>
+        <Item1 Ref="117" Value="#Ref-116" Description="Day" />
+        <Item2 Ref="119" Value="#Ref-118" Description="POS" />
+        <Item3 Ref="121" Value="#Ref-120" Description="Branch" />
+        <Item4 Ref="123" Value="#Ref-122" Description="Product category" />
+        <Item5 Ref="125" Value="#Ref-124" Description="Closing" />
+      </LookUpValues>
+    </Item9>
+    <Item10 Ref="114" ObjectType="DevExpress.XtraReports.Parameters.RangeStartParameter, DevExpress.Printing.v23.1.Core" ValueInfo="2022-12-01" Name="PeriodParameter_Start">
+      <ExpressionBindings>
+        <Item1 Ref="126" PropertyName="Value" Expression="Today() " />
+      </ExpressionBindings>
+    </Item10>
+    <Item11 Ref="115" ObjectType="DevExpress.XtraReports.Parameters.RangeEndParameter, DevExpress.Printing.v23.1.Core" ValueInfo="2022-12-01" Name="PeriodParameter_End">
+      <ExpressionBindings>
+        <Item1 Ref="127" PropertyName="Value" Expression="Today() " />
+      </ExpressionBindings>
+    </Item11>
+    <Item12 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v23.1" Ref="116" Content="Day" Type="System.String" />
+    <Item13 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v23.1" Ref="118" Content="POS" Type="System.String" />
+    <Item14 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v23.1" Ref="120" Content="Branch" Type="System.String" />
+    <Item15 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v23.1" Ref="122" Content="ProductCategory" Type="System.String" />
+    <Item16 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v23.1" Ref="124" Content="Closing" Type="System.String" />
+  </ObjectStorage>
+</XtraReportsLayoutSerializer>
